@@ -1,0 +1,39 @@
+# Define the variables
+category = 'MntGoldProducts'  # Amount spent on Gold
+
+# Split data into groups based on response (0 = not responded, 1 = responded)
+responded_Gold = data[data[response_column] == 1][category]
+not_responded_Gold = data[data[response_column] == 0][category]
+
+# Perform t-test to compare means of amount spent on Gold between responded and not responded groups
+t_stat_Gold, p_value_Gold = stats.ttest_ind(responded_Gold, not_responded_Gold)
+
+# Define significance level
+alpha = 0.05
+
+# Visualization - Box plot of amount spent on Gold by response status
+plt.figure(figsize=(8, 6))
+data.boxplot(column=category, by=response_column, grid=False)
+plt.title("Box plot of amount spent on Gold by response status")
+plt.ylabel("Amount spent on Gold")
+plt.xlabel("Response status")
+plt.xticks([1, 2], ['Not responded', 'Responded'])
+
+# Annotate the p-value on the plot
+if p_value_Gold < alpha:
+    plt.text(1.1, 200, f'P-value = {p_value_Gold:.4f}\nSignificant', fontsize=12, color='red')
+else:
+    plt.text(1.1, 200, f'P-value = {p_value_Gold:.4f}\nNot significant', fontsize=12, color='green')
+    
+# Print p value
+print(f'the p value is {p_value_Gold}')
+    
+# Print the result
+if p_value_Gold < alpha:
+    print("The amount spent on Gold significantly differs between customers who responded and those who did not respond to marketing campaigns.")
+else:
+    print("There is no significant difference in the amount spent on Gold between customers who responded and those who did not respond to marketing campaigns.")
+
+plt.figure(figsize=(15,15))
+plt.show()
+plt.tight_layout()
